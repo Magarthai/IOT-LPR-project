@@ -110,13 +110,14 @@ while True:
             else:
                 print(detected_classes_string, "Not Whitelisted!!!")
                 global_check = True
-                desired_angle = 1
+                desired_angle = 180
                 duty_cycle = angle_to_duty_cycle(desired_angle)
                 pwm.ChangeDutyCycle(duty_cycle)
                 time.sleep(10)  # Wait for 5 seconds
 
         else:
-            desired_angle = 1
+            print(detected_classes_string, "Not Found Anything!!!")
+            desired_angle = 180
             duty_cycle = angle_to_duty_cycle(desired_angle)
             pwm.ChangeDutyCycle(duty_cycle)
             time.sleep(10)  # Wait for 5 seconds
