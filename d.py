@@ -61,10 +61,6 @@ check_old_value = ""
 global_check = False
 
 while True:
-    if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
-            print("Object detected")
-    else:
-        print("No object detected")
     success, img = cap.read()
     frame_count += 1
 
@@ -133,7 +129,10 @@ while True:
         else:
             print("Not Found Anything!!!")
             set_angle(0)
-
+    if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
+        print("Object detected")
+    else:
+        print("No object detected")
     if cv2.waitKey(1) == ord('q'):
         break
 
