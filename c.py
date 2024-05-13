@@ -109,14 +109,14 @@ while True:
                 else:
                     print(detected_classes_string, "Not Whitelisted!!!")
                     global_check = True
-                    desired_angle = 0
-                    pwm.stop()
-                    GPIO.cleanup()
+                    desired_angle = 1
+                    duty_cycle = angle_to_duty_cycle(desired_angle)
+                    pwm.ChangeDutyCycle(duty_cycle)
 
         else :
-            desired_angle = 0
-            pwm.stop()
-            GPIO.cleanup()
+            desired_angle = 1
+            duty_cycle = angle_to_duty_cycle(desired_angle)
+            pwm.ChangeDutyCycle(duty_cycle)
 
                 
         
