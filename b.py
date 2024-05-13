@@ -27,7 +27,7 @@ font_path = "Kanit-Medium.ttf"  # Change to the path where your Thai font is loc
 font = ImageFont.truetype(font_path, 20)
 
 frame_count = 0
-frame_interval = 1  # ปรับตามต้องการให้ทำงานทุกเฟรมที่ถ่ายมา
+frame_interval = 10  # ปรับตามต้องการให้ทำงานทุกเฟรมที่ถ่ายมา
 while True:
     success, img = cap.read()
     frame_count += 1
