@@ -24,7 +24,7 @@ whitelist_collection = db.list_whitelist
 GPIO.setmode(GPIO.BCM)
 servo_pin = 17
 GPIO.setup(servo_pin, GPIO.OUT)
-pwm = GPIO.PWM(servo_pin, 50)
+pwm = GPIO.PWM(servo_pin, 200)
 pwm.start(0)
 
 def angle_to_duty_cycle(angle):
