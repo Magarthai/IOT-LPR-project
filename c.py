@@ -113,9 +113,16 @@ while True:
                     duty_cycle = angle_to_duty_cycle(desired_angle)
                     pwm.ChangeDutyCycle(duty_cycle)
         else :
-            desired_angle = 0
-            duty_cycle = angle_to_duty_cycle(desired_angle)
-            pwm.ChangeDutyCycle(duty_cycle)
+            if check_old_value is not None:
+                desired_angle = 0
+                time.sleep(5)  # รอ 5 วินาที
+                duty_cycle = angle_to_duty_cycle(desired_angle)
+                pwm.ChangeDutyCycle(duty_cycle)
+            else : 
+                desired_angle = 0
+                duty_cycle = angle_to_duty_cycle(desired_angle)
+                pwm.ChangeDutyCycle(duty_cycle)
+                
         
     if cv2.waitKey(1) == ord('q'):
         break
