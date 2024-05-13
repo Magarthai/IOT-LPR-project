@@ -118,6 +118,7 @@ while True:
                 print(detected_classes_string, "Is Whitelisted!!!")
                 global_check = True
                 set_angle(90)
+                time.sleep(5)
 
             else:
                 print(detected_classes_string, "Not Whitelisted!!!")
