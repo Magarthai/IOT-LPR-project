@@ -7,8 +7,8 @@ from pymongo import MongoClient
 
 # Start webcam
 cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)  # กำหนดความกว้างของภาพเป็น 320 พิกเซล
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)  # กำหนดความสูงของภาพเป็น 240 พิกเซล
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # กำหนดความกว้างของภาพเป็น 640 พิกเซล
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # กำหนดความสูงของภาพเป็น 480 พิกเซล
 
 # Model
 model = YOLO("v3.pt")
@@ -26,60 +26,65 @@ classNames = ['0', '1', 'ก', 'ข', 'ค', 'ฆ', 'ง', 'จ', 'ฉ', 'ช', 
 font_path = "Kanit-Medium.ttf"  # Change to the path where your Thai font is located
 font = ImageFont.truetype(font_path, 20)
 
+frame_count = 0
+frame_interval = 3  # ปรับตามต้องการให้ทำงานทุกเฟรมที่ถ่ายมา
 while True:
     success, img = cap.read()
-    results = model(img, stream=True)
+    frame_count += 1
 
-    # Create an image from OpenCV frame
-    img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-    draw = ImageDraw.Draw(img_pil)
+    if frame_count % frame_interval == 0:
+        results = model(img, stream=True)
 
-    # Create a list to store detected objects
-    detected_objects = []
+        # Create an image from OpenCV frame
+        img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        draw = ImageDraw.Draw(img_pil)
 
-    # Coordinates
-    for r in results:
-        boxes = r.boxes
+        # Create a list to store detected objects
+        detected_objects = []
 
-        for box in boxes:
-            # Bounding box
-            x1, y1, x2, y2 = box.xyxy[0]
-            x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+        # Coordinates
+        for r in results:
+            boxes = r.boxes
 
-            # Confidence
-            confidence = math.ceil((box.conf[0] * 100)) / 100
+            for box in boxes:
+                # Bounding box
+                x1, y1, x2, y2 = box.xyxy[0]
+                x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-            # Class name
-            cls = int(box.cls[0])
-            class_name = classNames[cls]
+                # Confidence
+                confidence = math.ceil((box.conf[0] * 100)) / 100
 
-            # Store detected object information
-            detected_objects.append((x1, class_name))
+                # Class name
+                cls = int(box.cls[0])
+                class_name = classNames[cls]
 
-    # Sort detected objects by x1 (from left to right)
-    detected_objects.sort(key=lambda x: x[0])
+                # Store detected object information
+                detected_objects.append((x1, class_name))
 
-    # Build a string of class names from left to right
-    detected_classes_string = "".join([obj[1] for obj in detected_objects])
+        # Sort detected objects by x1 (from left to right)
+        detected_objects.sort(key=lambda x: x[0])
 
-    # Draw rectangles and text with custom font
-    for x1, class_name in detected_objects:
-        cv2.rectangle(img, (x1, y1), (x1 + 60, y1 + 30), (255, 0, 255), 3)  # draw rectangle in OpenCV
-        draw.text((x1, y1), f"{class_name}", font=font, fill=(255, 0, 0))
+        # Build a string of class names from left to right
+        detected_classes_string = "".join([obj[1] for obj in detected_objects])
 
-    # Convert back to OpenCV format
-    img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
+        # Draw rectangles and text with custom font
+        for x1, class_name in detected_objects:
+            cv2.rectangle(img, (x1, y1), (x1 + 60, y1 + 30), (255, 0, 255), 3)  # draw rectangle in OpenCV
+            draw.text((x1, y1), f"{class_name}", font=font, fill=(255, 0, 0))
 
-    # Show the image
-    cv2.imshow('Webcam', img)
+        # Convert back to OpenCV format
+        img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
 
-    if len(detected_classes_string) > 0:
-        data = {"license": detected_classes_string}
-        result = whitelist_collection.find_one(data)
-        if result is not None:
-            print(detected_classes_string, "Is Whitelisted!!!")
-        else:
-            print(detected_classes_string, "Not Whitelisted!!!")
+        # Show the image
+        cv2.imshow('Webcam', img)
+
+        if len(detected_classes_string) > 0:
+            data = {"license": detected_classes_string}
+            result = whitelist_collection.find_one(data)
+            if result is not None:
+                print(detected_classes_string, "Is Whitelisted!!!")
+            else:
+                print(detected_classes_string, "Not Whitelisted!!!")
 
     if cv2.waitKey(1) == ord('q'):
         break
