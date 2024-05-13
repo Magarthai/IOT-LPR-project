@@ -120,7 +120,6 @@ while True:
                 else:
                     print(detected_classes_string, "Not Whitelisted!!!")
                     global_check = False
-                    time.sleep(5)
                     set_angle(0)
                 check_old_value = detected_classes_string  # Update the old value
             else:
