@@ -105,7 +105,7 @@ while True:
                 desired_angle = 90
                 duty_cycle = angle_to_duty_cycle(desired_angle)
                 pwm.ChangeDutyCycle(duty_cycle)
-                time.sleep(5)  # Wait for 5 seconds
+                time.sleep(10)  # Wait for 5 seconds
 
             else:
                 print(detected_classes_string, "Not Whitelisted!!!")
@@ -113,13 +113,13 @@ while True:
                 desired_angle = 1
                 duty_cycle = angle_to_duty_cycle(desired_angle)
                 pwm.ChangeDutyCycle(duty_cycle)
-                time.sleep(5)  # Wait for 5 seconds
+                time.sleep(10)  # Wait for 5 seconds
 
         else:
             desired_angle = 1
             duty_cycle = angle_to_duty_cycle(desired_angle)
             pwm.ChangeDutyCycle(duty_cycle)
-            time.sleep(5)  # Wait for 5 seconds
+            time.sleep(10)  # Wait for 5 seconds
 
     if cv2.waitKey(1) == ord('q'):
         break
