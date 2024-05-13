@@ -24,7 +24,7 @@ whitelist_collection = db.list_whitelist
 GPIO.setmode(GPIO.BCM)
 servo_pin = 17
 GPIO.setup(servo_pin, GPIO.OUT)
-pwm = GPIO.PWM(servo_pin, 50)
+pwm = GPIO.PWM(servo_pin, 200)
 pwm.start(0)
 
 def angle_to_duty_cycle(angle):
@@ -111,16 +111,12 @@ while True:
                     desired_angle = 0
                     duty_cycle = angle_to_duty_cycle(desired_angle)
                     pwm.ChangeDutyCycle(duty_cycle)
-            else:
-                if global_check:
-                    desired_angle = 90
-                    duty_cycle = angle_to_duty_cycle(desired_angle)
-                    pwm.ChangeDutyCycle(duty_cycle)
-                else:
-                    desired_angle = 0
-                    time.sleep(5)  # รอ 5 วินาที
-                    duty_cycle = angle_to_duty_cycle(desired_angle)
-                    pwm.ChangeDutyCycle(duty_cycle)
+
+        else :
+            desired_angle = 0
+            time.sleep(5)  # รอ 5 วินาที
+            duty_cycle = angle_to_duty_cycle(desired_angle)
+            pwm.ChangeDutyCycle(duty_cycle)
         
     if cv2.waitKey(1) == ord('q'):
         break
