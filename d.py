@@ -109,7 +109,10 @@ while True:
 
         # Show the image
         cv2.imshow('Webcam', img)
-
+        if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
+            print("Object detected")
+        else:
+            print("No object detected")
         if len(detected_classes_string) > 0:
             data = {"license": detected_classes_string}
             print('data : ', detected_classes_string)
@@ -129,10 +132,7 @@ while True:
         else:
             print("Not Found Anything!!!")
             set_angle(0)
-    if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
-        print("Object detected")
-    else:
-        print("No object detected")
+    
     if cv2.waitKey(1) == ord('q'):
         break
 
