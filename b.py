@@ -28,7 +28,7 @@ font_path = "Kanit-Medium.ttf"  # Change to the path where your Thai font is loc
 font = ImageFont.truetype(font_path, 20)
 
 # กำหนดเวลาสำหรับการตรวจจับทุก 3 วินาที
-detection_interval = 3
+detection_interval = 8
 
 # เวลาที่เริ่มต้นการตรวจจับ
 start_time = time.time()
