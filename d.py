@@ -29,9 +29,11 @@ GPIO.setmode(GPIO.BCM)
 
 # Set the GPIO pin for the servo
 servo_pin = 25
+ir_sensor_pin = 17
 
 # Set PWM parameters
 GPIO.setup(servo_pin, GPIO.OUT)
+GPIO.setup(ir_sensor_pin, GPIO.IN)
 pwm = GPIO.PWM(servo_pin, 50) # 50 Hz (20 ms PWM period)
 
 # Function to convert angle to duty cycle
@@ -59,6 +61,10 @@ check_old_value = ""
 global_check = False
 
 while True:
+    if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
+            print("Object detected")
+    else:
+        print("No object detected")
     success, img = cap.read()
     frame_count += 1
 
