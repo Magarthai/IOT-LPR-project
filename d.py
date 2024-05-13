@@ -28,7 +28,7 @@ import time
 GPIO.setmode(GPIO.BCM)
 
 # Set the GPIO pin for the servo
-servo_pin = 25
+servo_pin = 27
 ir_sensor_pin = 17
 
 # Set PWM parameters
