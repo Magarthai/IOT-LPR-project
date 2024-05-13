@@ -110,9 +110,9 @@ while True:
         # Show the image
         cv2.imshow('Webcam', img)
         if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
-            print("Object detected")
+            print("Slot 1 parking")
         else:
-            print("No object detected")
+            print("Slot 1 clear")
         if len(detected_classes_string) > 0:
             data = {"license": detected_classes_string}
             print('data : ', detected_classes_string)
