@@ -58,18 +58,19 @@ while True:
         detected_objects = []
 
         # Coordinates
-        for r in results.xywh:
-            boxes = r[:, :4]
+        for r in results:
+            boxes = r.boxes
+
             for box in boxes:
                 # Bounding box
-                x1, y1, x2, y2 = box
+                x1, y1, x2, y2 = box.xyxy[0]
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
                 # Confidence
-                confidence = math.ceil((r[4] * 100)) / 100
+                confidence = math.ceil((box.conf[0] * 100)) / 100
 
                 # Class name
-                cls = int(r[5])
+                cls = int(box.cls[0])
                 class_name = classNames[cls]
 
                 # Store detected object information
