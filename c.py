@@ -114,6 +114,8 @@ while True:
                     desired_angle = 0
                     duty_cycle = angle_to_duty_cycle(desired_angle)
                     pwm.ChangeDutyCycle(duty_cycle)
+                    pwm.stop()
+                    GPIO.cleanup()
                     print("Desired Angle:", desired_angle)
                     print("Duty Cycle:", duty_cycle)
 
@@ -123,6 +125,8 @@ while True:
             pwm.ChangeDutyCycle(duty_cycle)
             print("Desired Angle:", desired_angle)
             print("Duty Cycle:", duty_cycle)
+            pwm.stop()
+            GPIO.cleanup()
 
                 
         
