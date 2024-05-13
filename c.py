@@ -105,8 +105,6 @@ while True:
                     desired_angle = 180
                     duty_cycle = angle_to_duty_cycle(desired_angle)
                     pwm.ChangeDutyCycle(duty_cycle)
-                    print("Desired Angle:", desired_angle)
-                    print("Duty Cycle:", duty_cycle)
 
                 else:
                     print(detected_classes_string, "Not Whitelisted!!!")
@@ -114,8 +112,6 @@ while True:
                     desired_angle = 0
                     pwm.stop()
                     GPIO.cleanup()
-                    print("Desired Angle:", desired_angle)
-                    print("Duty Cycle:", duty_cycle)
 
         else :
             desired_angle = 0
