@@ -58,9 +58,8 @@ while True:
         detected_objects = []
 
         # Coordinates
-        for r in results.pred:
+        for r in results.xywh:
             boxes = r[:, :4]
-
             for box in boxes:
                 # Bounding box
                 x1, y1, x2, y2 = box
