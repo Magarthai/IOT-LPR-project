@@ -103,20 +103,24 @@ while True:
                     global_check = True
                     desired_angle = 90
                     duty_cycle = angle_to_duty_cycle(desired_angle)
+                    pwm.ChangeDutyCycle(duty_cycle)
                 else:
                     print(detected_classes_string, "Not Whitelisted!!!")
                     global_check = True
                     time.sleep(5)  # รอ 5 วินาที
                     desired_angle = 0
                     duty_cycle = angle_to_duty_cycle(desired_angle)
+                    pwm.ChangeDutyCycle(duty_cycle)
             else:
                 if global_check:
                     desired_angle = 90
                     duty_cycle = angle_to_duty_cycle(desired_angle)
+                    pwm.ChangeDutyCycle(duty_cycle)
                 else:
                     desired_angle = 0
                     time.sleep(5)  # รอ 5 วินาที
                     duty_cycle = angle_to_duty_cycle(desired_angle)
+                    pwm.ChangeDutyCycle(duty_cycle)
         
     if cv2.waitKey(1) == ord('q'):
         break
