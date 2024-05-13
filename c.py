@@ -95,6 +95,7 @@ while True:
 
         if len(detected_classes_string) > 0:
                 data = {"license": detected_classes_string}
+                print('data : ', detected_classes_string)
                 result = whitelist_collection.find_one(data)
                 check_old_value = detected_classes_string
                 print(check_old_value)
