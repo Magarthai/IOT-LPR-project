@@ -21,14 +21,29 @@ client = MongoClient(MONGODB_URI)
 db = client.whitelist
 whitelist_collection = db.list_whitelist
 
-GPIO.setmode(GPIO.BCM)
-servo_pin = 17
-GPIO.setup(servo_pin, GPIO.OUT)
-pwm = GPIO.PWM(servo_pin, 200)
-pwm.start(0)
+import RPi.GPIO as GPIO
+import time
 
+# Set the GPIO mode
+GPIO.setmode(GPIO.BCM)
+
+# Set the GPIO pin for the servo
+servo_pin = 25
+
+# Set PWM parameters
+GPIO.setup(servo_pin, GPIO.OUT)
+pwm = GPIO.PWM(servo_pin, 50) # 50 Hz (20 ms PWM period)
+
+# Function to convert angle to duty cycle
 def angle_to_duty_cycle(angle):
-    return 2 + (angle / 18)
+    duty_cycle = (angle / 18) + 2
+    return duty_cycle
+
+# Function to move the servo to a specific angle
+def set_angle(angle):
+    duty_cycle = angle_to_duty_cycle(angle)
+    pwm.start(duty_cycle)
+    time.sleep(1) # Wait for the servo to reach the position
 
 # Object classes
 classNames = ['0', '1', 'ก', 'ข', 'ค', 'ฆ', 'ง', 'จ', 'ฉ', 'ช', 'ฌ', 'ญ', '2', 'ฎ', 'ฐ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', '3', 'บ', 'ผ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', '4', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ', '5', '6', '7', '8', '9']
@@ -102,25 +117,15 @@ while True:
             if result is not None:
                 print(detected_classes_string, "Is Whitelisted!!!")
                 global_check = True
-                desired_angle = 90
-                duty_cycle = angle_to_duty_cycle(desired_angle)
-                pwm.ChangeDutyCycle(duty_cycle)
-                time.sleep(10)  # Wait for 5 seconds
+                set_angle(90)
 
             else:
                 print(detected_classes_string, "Not Whitelisted!!!")
                 global_check = True
-                desired_angle = 180
-                duty_cycle = angle_to_duty_cycle(desired_angle)
-                pwm.ChangeDutyCycle(duty_cycle)
-                time.sleep(10)  # Wait for 5 seconds
-
+                set_angle(0)
         else:
-            print(detected_classes_string, "Not Found Anything!!!")
-            desired_angle = 180
-            duty_cycle = angle_to_duty_cycle(desired_angle)
-            pwm.ChangeDutyCycle(duty_cycle)
-            time.sleep(10)  # Wait for 5 seconds
+            print("Not Found Anything!!!")
+            set_angle(0)
 
     if cv2.waitKey(1) == ord('q'):
         break
