@@ -98,7 +98,6 @@ while True:
                 data = {"license": detected_classes_string}
                 result = whitelist_collection.find_one(data)
                 check_old_value = detected_classes_string
-                print(check_old_value)
                 if result is not None:
                     print(detected_classes_string, "Is Whitelisted!!!")
                     global_check = True
@@ -112,9 +111,19 @@ while True:
                     desired_angle = 0
                     duty_cycle = angle_to_duty_cycle(desired_angle)
                     pwm.ChangeDutyCycle(duty_cycle)
-
+            else:
+                if global_check:
+                    desired_angle = 90
+                    duty_cycle = angle_to_duty_cycle(desired_angle)
+                    pwm.ChangeDutyCycle(duty_cycle)
+                else:
+                    desired_angle = 0
+                    time.sleep(5)  # รอ 5 วินาที
+                    duty_cycle = angle_to_duty_cycle(desired_angle)
+                    pwm.ChangeDutyCycle(duty_cycle)
         else :
             desired_angle = 0
+            time.sleep(5)  # รอ 5 วินาที
             duty_cycle = angle_to_duty_cycle(desired_angle)
             pwm.ChangeDutyCycle(duty_cycle)
         
