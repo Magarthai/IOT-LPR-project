@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-
+import time
 # Set up GPIO mode
 GPIO.setmode(GPIO.BCM)
 
@@ -25,6 +25,7 @@ try:
             if GPIO.input(pin) == GPIO.HIGH:
                 sensor_counts[sensor] += 1
                 print(f"{sensor} IR code is high. Count: {sensor_counts[sensor]}")
+                time.sleep(5)
 
 finally:
     # Clean up GPIO
