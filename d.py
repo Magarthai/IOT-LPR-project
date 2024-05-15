@@ -34,7 +34,7 @@ ir_sensor_pin1 = 26
 ir_sensor_pin2 = 19
 ir_sensor_pin3 = 20
 ir_sensor_pin4 = 16
-
+buzzer_pin = 23
 # Set PWM parameters
 GPIO.setup(servo_pin, GPIO.OUT)
 GPIO.setup(servo2_pin, GPIO.OUT)
@@ -42,6 +42,7 @@ GPIO.setup(ir_sensor_pin1, GPIO.IN)
 GPIO.setup(ir_sensor_pin2, GPIO.IN)
 GPIO.setup(ir_sensor_pin3, GPIO.IN)
 GPIO.setup(ir_sensor_pin4, GPIO.IN)
+GPIO.setup(buzzer_pin, GPIO.OUT)
 pwm = GPIO.PWM(servo_pin, 50) # 50 Hz (20 ms PWM period)
 pwm2 = GPIO.PWM(servo2_pin, 50) # 50 Hz (20 ms PWM period)
 # Function to convert angle to duty cycle
@@ -200,6 +201,10 @@ while True:
                 set_angle(0)
         else:
             print("Full slot!!!")
+            GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
+            time.sleep(0.5)  # Beep for 0.5 seconds
+            GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
+            time.sleep(0.5)  # Wait for 0.5 seconds between beeps
             set_angle(0)
             
     if cv2.waitKey(1) == ord('q'):
