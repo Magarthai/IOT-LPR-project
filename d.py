@@ -168,8 +168,8 @@ while True:
     #     cv2.imshow('Webcam', img)
         
 
-    #     IR_active = checkIR()
-    #     inactive_IR = 4 - IR_active
+    IR_active = checkIR()
+    inactive_IR = 4 - IR_active
 
     #     dist = distance()
     #     print(dist)
