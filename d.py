@@ -42,11 +42,10 @@ GPIO.setup(ir_sensor_pin1, GPIO.IN)
 GPIO.setup(ir_sensor_pin2, GPIO.IN)
 GPIO.setup(ir_sensor_pin3, GPIO.IN)
 GPIO.setup(ir_sensor_pin4, GPIO.IN)
-
+GPIO.setup(buzzer_pin, GPIO.OUT)
 pwm = GPIO.PWM(servo_pin, 50) # 50 Hz (20 ms PWM period)
 pwm2 = GPIO.PWM(servo2_pin, 50) # 50 Hz (20 ms PWM period)
 # Function to convert angle to duty cycle
-GPIO.setup(buzzer_pin, GPIO.OUT)
 def angle_to_duty_cycle(angle):
     duty_cycle = (angle / 18) + 2
     return duty_cycle
@@ -61,9 +60,7 @@ def checkIR():
     elif GPIO.input(ir_sensor_pin4) == GPIO.HIGH:
         full -= 1
     return full
-
-
-
+        
 # Function to move the servo to a specific angle
 def set_angle(angle):
     duty_cycle = angle_to_duty_cycle(angle)
@@ -81,11 +78,6 @@ def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(TRIG, GPIO.OUT)
     GPIO.setup(ECHO, GPIO.IN)
-def beep():
-    GPIO.output(buzzer_pin, GPIO.HIGH)
-    time.sleep(1)
-    GPIO.output(buzzer_pin, GPIO.LOW)
-    time.sleep(1)
 
 def distance():
     # Set trigger to HIGH
@@ -175,6 +167,10 @@ while True:
         # Show the image
         cv2.imshow('Webcam', img)
         
+
+        IR_active = checkIR()
+        inactive_IR = 4 - IR_active
+
         dist = distance()
         print(dist)
         if 1 <= dist < 15:
@@ -182,7 +178,6 @@ while True:
         else:
             set_angle2(0)
         IR_active = checkIR()
-        inactive_IR = 4 - IR_active
         
         if inactive_IR > 0 :
             if len(detected_classes_string) > 0:
@@ -205,13 +200,15 @@ while True:
                 print("Not Found Anything!!!")
                 set_angle(0)
         else:
-            beep()
             print("Full slot!!!")
-            
+            GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
+            time.sleep(0.5)  # Beep for 0.5 seconds
+            GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
+            time.sleep(0.5)  # Wait for 0.5 seconds between beeps
             set_angle(0)
             
     if cv2.waitKey(1) == ord('q'):
         break
-    
+
 cap.release()
 cv2.destroyAllWindows()
