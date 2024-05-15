@@ -203,9 +203,10 @@ while True:
                 set_angle(0)
         else:
             print("Full slot!!!")
-            GPIO.output(23, GPIO.HIGH)  # Turn buzzer on
+            for _ in range(2):
+            GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
             time.sleep(0.5)  # Beep for 0.5 seconds
-            GPIO.output(23, GPIO.LOW)  # Turn buzzer off
+            GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
             time.sleep(0.5)  # Wait for 0.5 seconds between beeps
             set_angle(0)
             
