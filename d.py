@@ -101,6 +101,11 @@ check_old_value = ""
 global_check = False
 setup()
 while True:
+    if 1 <= dist < 5:
+        set_angle2(90)
+        time.sleep(5)
+    else:
+        set_angle2(0)
     success, img = cap.read()
     frame_count += 1
 
@@ -148,11 +153,6 @@ while True:
         img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
         dist = distance()
         print(dist)
-        if 1 <= dist < 5:
-            set_angle2(90)
-            time.sleep(5)
-        else:
-            set_angle(0)
         # Show the image
         cv2.imshow('Webcam', img)
         if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
