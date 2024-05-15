@@ -60,7 +60,9 @@ def checkIR():
     elif GPIO.input(ir_sensor_pin4) == GPIO.HIGH:
         full -= 1
     return full
-        
+
+
+
 # Function to move the servo to a specific angle
 def set_angle(angle):
     duty_cycle = angle_to_duty_cycle(angle)
@@ -119,10 +121,6 @@ check_old_value = ""
 global_check = False
 setup()
 while True:
-    GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
-    time.sleep(0.5)  # Beep for 0.5 seconds
-    GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
-    time.sleep(0.5)  # Wait for 0.5 seconds between beeps
     success, img = cap.read()
     frame_count += 1
 
@@ -205,9 +203,9 @@ while True:
                 set_angle(0)
         else:
             print("Full slot!!!")
-            GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
+            GPIO.output(23, GPIO.HIGH)  # Turn buzzer on
             time.sleep(0.5)  # Beep for 0.5 seconds
-            GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
+            GPIO.output(23, GPIO.LOW)  # Turn buzzer off
             time.sleep(0.5)  # Wait for 0.5 seconds between beeps
             set_angle(0)
             
