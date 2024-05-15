@@ -119,6 +119,10 @@ check_old_value = ""
 global_check = False
 setup()
 while True:
+    GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
+    time.sleep(0.5)  # Beep for 0.5 seconds
+    GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
+    time.sleep(0.5)  # Wait for 0.5 seconds between beeps
     success, img = cap.read()
     frame_count += 1
 
