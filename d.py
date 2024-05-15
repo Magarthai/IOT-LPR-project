@@ -159,7 +159,7 @@ while True:
         if 1 <= dist < 5:
             set_angle2(90)
         else:
-        set_angle2(0)
+            set_angle2(0)
         if len(detected_classes_string) > 0:
             data = {"license": detected_classes_string}
             print('data : ', detected_classes_string)
