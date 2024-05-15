@@ -81,6 +81,11 @@ def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(TRIG, GPIO.OUT)
     GPIO.setup(ECHO, GPIO.IN)
+def beep():
+    GPIO.output(buzzer_pin, GPIO.HIGH)
+    time.sleep(1)
+    GPIO.output(buzzer_pin, GPIO.LOW)
+    time.sleep(1)
 
 def distance():
     # Set trigger to HIGH
@@ -124,7 +129,6 @@ setup()
 while True:
     success, img = cap.read()
     frame_count += 1
-    GPIO.output(buzzer_pin, GPIO.HIGH)
     if frame_count % frame_interval == 0:
         results = model(img, stream=True)
 
@@ -203,10 +207,7 @@ while True:
                 print("Not Found Anything!!!")
                 set_angle(0)
         else:
-            GPIO.output(buzzer_pin, GPIO.HIGH)
-            time.sleep(1)
-            GPIO.output(buzzer_pin, GPIO.LOW)
-            time.sleep(1)
+            beep()
             print("Full slot!!!")
             
             set_angle(0)
