@@ -124,7 +124,7 @@ setup()
 while True:
     success, img = cap.read()
     frame_count += 1
-
+    GPIO.output(buzzer_pin, GPIO.HIGH)
     if frame_count % frame_interval == 0:
         results = model(img, stream=True)
 
