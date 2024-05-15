@@ -99,7 +99,7 @@ frame_interval = 10  # Adjust as needed
 
 check_old_value = ""
 global_check = False
-
+setup()
 while True:
     success, img = cap.read()
     frame_count += 1
