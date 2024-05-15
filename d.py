@@ -129,9 +129,8 @@ setup()
 while True:
     success, img = cap.read()
     frame_count += 1
-    inactive_IR = 4 - IR_active
-
     IR_active = checkIR()
+    inactive_IR = 4 - IR_active
     
     if inactive_IR > 0 :
         if frame_count % frame_interval == 0:
@@ -178,9 +177,6 @@ while True:
             img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
             # Show the image
             cv2.imshow('Webcam', img)
-            
-    
-            IR_active = checkIR()
             
             dist = distance()
             print(dist)
