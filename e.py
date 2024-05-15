@@ -37,6 +37,10 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 # Model
 model = YOLO("v3.pt")
+def setup():
+  GPIO.setmode(GPIO.BCM)
+  GPIO.setup(TRIG, GPIO.OUT)
+  GPIO.setup(ECHO, GPIO.IN)
 
 # MongoDB connection
 MONGODB_URI = "mongodb+srv://magargame:Magarthai1@cluster0.msxpgo0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
