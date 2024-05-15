@@ -205,8 +205,7 @@ while True:
         else:
             GPIO.output(23, GPIO.HIGH)
             time.sleep(1)
-            GPIO.output(23, GPIO.LOW)
-            time.sleep(1)
+
             print("Full slot!!!")
             
             set_angle(0)
