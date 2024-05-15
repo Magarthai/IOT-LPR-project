@@ -34,15 +34,15 @@ ir_sensor_pin1 = 26
 ir_sensor_pin2 = 19
 ir_sensor_pin3 = 20
 ir_sensor_pin4 = 16
-buzzer_pin = 23
+buzzer_pin = 24
 # Set PWM parameters
+GPIO.setup(buzzer_pin, GPIO.OUT)
 GPIO.setup(servo_pin, GPIO.OUT)
 GPIO.setup(servo2_pin, GPIO.OUT)
 GPIO.setup(ir_sensor_pin1, GPIO.IN)
 GPIO.setup(ir_sensor_pin2, GPIO.IN)
 GPIO.setup(ir_sensor_pin3, GPIO.IN)
 GPIO.setup(ir_sensor_pin4, GPIO.IN)
-GPIO.setup(buzzer_pin, GPIO.OUT)
 pwm = GPIO.PWM(servo_pin, 50) # 50 Hz (20 ms PWM period)
 pwm2 = GPIO.PWM(servo2_pin, 50) # 50 Hz (20 ms PWM period)
 # Function to convert angle to duty cycle
@@ -119,97 +119,96 @@ check_old_value = ""
 global_check = False
 setup()
 while True:
-    # success, img = cap.read()
-    # frame_count += 1
+    success, img = cap.read()
+    frame_count += 1
 
-    # if frame_count % frame_interval == 0:
-    #     results = model(img, stream=True)
+    if frame_count % frame_interval == 0:
+        results = model(img, stream=True)
 
-    #     # Create an image from OpenCV frame
-    #     img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-    #     draw = ImageDraw.Draw(img_pil)
+        # Create an image from OpenCV frame
+        img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        draw = ImageDraw.Draw(img_pil)
 
-    #     # Create a list to store detected objects
-    #     detected_objects = []
+        # Create a list to store detected objects
+        detected_objects = []
 
-    #     # Coordinates
-    #     for r in results:
-    #         boxes = r.boxes
+        # Coordinates
+        for r in results:
+            boxes = r.boxes
 
-    #         for box in boxes:
-    #             # Bounding box
-    #             x1, y1, x2, y2 = box.xyxy[0]
-    #             x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+            for box in boxes:
+                # Bounding box
+                x1, y1, x2, y2 = box.xyxy[0]
+                x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-    #             # Confidence
-    #             confidence = math.ceil((box.conf[0] * 100)) / 100
+                # Confidence
+                confidence = math.ceil((box.conf[0] * 100)) / 100
 
-    #             # Class name
-    #             cls = int(box.cls[0])
-    #             class_name = classNames[cls]
+                # Class name
+                cls = int(box.cls[0])
+                class_name = classNames[cls]
 
-    #             # Store detected object information
-    #             detected_objects.append((x1, class_name))
+                # Store detected object information
+                detected_objects.append((x1, class_name))
 
-    #     # Sort detected objects by x1 (from left to right)
-    #     detected_objects.sort(key=lambda x: x[0])
+        # Sort detected objects by x1 (from left to right)
+        detected_objects.sort(key=lambda x: x[0])
 
-    #     # Build a string of class names from left to right
-    #     detected_classes_string = "".join([obj[1] for obj in detected_objects])
+        # Build a string of class names from left to right
+        detected_classes_string = "".join([obj[1] for obj in detected_objects])
 
-    #     # Draw rectangles and text with custom font
-    #     for x1, class_name in detected_objects:
-    #         cv2.rectangle(img, (x1, y1), (x1 + 60, y1 + 30), (255, 0, 255), 3)  # draw rectangle in OpenCV
-    #         draw.text((x1, y1), f"{class_name}", font=font, fill=(255, 0, 0))
+        # Draw rectangles and text with custom font
+        for x1, class_name in detected_objects:
+            cv2.rectangle(img, (x1, y1), (x1 + 60, y1 + 30), (255, 0, 255), 3)  # draw rectangle in OpenCV
+            draw.text((x1, y1), f"{class_name}", font=font, fill=(255, 0, 0))
 
-    #     # Convert back to OpenCV format
-    #     img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
-    #     # Show the image
-    #     cv2.imshow('Webcam', img)
+        # Convert back to OpenCV format
+        img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
+        # Show the image
+        cv2.imshow('Webcam', img)
         
 
-    IR_active = checkIR()
-    inactive_IR = 4 - IR_active
+        IR_active = checkIR()
+        inactive_IR = 4 - IR_active
 
-    #     dist = distance()
-    #     print(dist)
-    #     if 1 <= dist < 15:
-    #         set_angle2(90)
-    #     else:
-    #         set_angle2(0)
-    #     IR_active = checkIR()
+        dist = distance()
+        print(dist)
+        if 1 <= dist < 15:
+            set_angle2(90)
+        else:
+            set_angle2(0)
+        IR_active = checkIR()
         
-    if inactive_IR > 0 :
-        # if len(detected_classes_string) > 0:
-        #     data = {"license": detected_classes_string}
-        #     print('data : ', detected_classes_string)
-        #     result = whitelist_collection.find_one(data)
-        #     check_old_value = detected_classes_string
-        #     print(check_old_value)
-        #     if result is not None:
-        #         print(detected_classes_string, "Is Whitelisted!!!")
-        #         global_check = True
-        #         set_angle(90)
-        #         time.sleep(5)
-
-        #     else:
-        #         print(detected_classes_string, "Not Whitelisted!!!")
-        #         global_check = True
-        #         set_angle(0)
-        # else:
-        #     print("Not Found Anything!!!")
-        #     set_angle(0)
-        GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
-    else:
-        print("Full slot!!!")
-        GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
-        time.sleep(0.5)  # Beep for 0.5 seconds
-        GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
-        time.sleep(0.5)  # Wait for 0.5 seconds between beeps
-        set_angle(0)
+        if inactive_IR > 0 :
+            if len(detected_classes_string) > 0:
+                data = {"license": detected_classes_string}
+                print('data : ', detected_classes_string)
+                result = whitelist_collection.find_one(data)
+                check_old_value = detected_classes_string
+                print(check_old_value)
+                if result is not None:
+                    print(detected_classes_string, "Is Whitelisted!!!")
+                    global_check = True
+                    set_angle(90)
+                    time.sleep(5)
+    
+                else:
+                    print(detected_classes_string, "Not Whitelisted!!!")
+                    global_check = True
+                    set_angle(0)
+            else:
+                print("Not Found Anything!!!")
+                set_angle(0)
+        else:
+            print("Full slot!!!")
+            GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
+            time.sleep(1)  # Beep for 0.5 seconds
+            GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
+            time.sleep(1)  # Wait for 0.5 seconds between beeps
+            set_angle(0)
             
-    # if cv2.waitKey(1) == ord('q'):
-    #     break
+    if cv2.waitKey(1) == ord('q'):
+        break
 
 cap.release()
 cv2.destroyAllWindows()
