@@ -29,13 +29,15 @@ GPIO.setmode(GPIO.BCM)
 
 # Set the GPIO pin for the servo
 servo_pin = 27
+servo2_pin = 25
 ir_sensor_pin = 17
 
 # Set PWM parameters
 GPIO.setup(servo_pin, GPIO.OUT)
+GPIO.setup(servo2_pin, GPIO.OUT)
 GPIO.setup(ir_sensor_pin, GPIO.IN)
 pwm = GPIO.PWM(servo_pin, 50) # 50 Hz (20 ms PWM period)
-
+pwm2 = GPIO.PWM(servo2_pin, 50) # 50 Hz (20 ms PWM period)
 # Function to convert angle to duty cycle
 def angle_to_duty_cycle(angle):
     duty_cycle = (angle / 18) + 2
@@ -46,7 +48,45 @@ def set_angle(angle):
     duty_cycle = angle_to_duty_cycle(angle)
     pwm.start(duty_cycle)
     time.sleep(1) # Wait for the servo to reach the position
+    
+def set_angle2(angle):
+    duty_cycle = angle_to_duty_cycle(angle)
+    pwm.start(duty_cycle)
+    time.sleep(1) # Wait for the servo to reach the position
+TRIG = 6
+ECHO = 5
 
+def setup():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(TRIG, GPIO.OUT)
+    GPIO.setup(ECHO, GPIO.IN)
+
+def distance():
+    # Set trigger to HIGH
+    GPIO.output(TRIG, True)
+    time.sleep(0.00001)
+    GPIO.output(TRIG, False)
+
+    start_time = time.time()
+    end_time = time.time()
+
+    # Wait for the echo to start
+    while GPIO.input(ECHO) == 0:
+        start_time = time.time()
+
+    # Wait for the echo to end
+    while GPIO.input(ECHO) == 1:
+        end_time = time.time()
+
+    # Calculate pulse duration
+    pulse_duration = end_time - start_time
+
+    # Speed of sound = 343m/s = 34300cm/s = 0.0343cm/µs
+    # Distance = (Time * Speed)/2
+    distance_cm = (pulse_duration * 34300) / 2
+
+    return distance_cm
+    
 # Object classes
 classNames = ['0', '1', 'ก', 'ข', 'ค', 'ฆ', 'ง', 'จ', 'ฉ', 'ช', 'ฌ', 'ญ', '2', 'ฎ', 'ฐ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', '3', 'บ', 'ผ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', '4', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ', '5', '6', '7', '8', '9']
 
@@ -106,7 +146,13 @@ while True:
 
         # Convert back to OpenCV format
         img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
-
+        dist = distance()
+        print(dist)
+        if(dist < 5):
+            set_angle(90)
+            time.sleep(5)
+        else:
+            set_angle(90)
         # Show the image
         cv2.imshow('Webcam', img)
         if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
