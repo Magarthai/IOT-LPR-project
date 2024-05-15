@@ -156,7 +156,7 @@ while True:
 
         dist = distance()
         print(dist)
-        if 1 <= dist < 5:
+        if 1 <= dist < 15:
             set_angle2(90)
         else:
             set_angle2(0)
