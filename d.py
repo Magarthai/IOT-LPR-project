@@ -129,90 +129,89 @@ setup()
 while True:
     success, img = cap.read()
     frame_count += 1
-    IR_active = checkIR()
-    inactive_IR = 4 - IR_active
-    
-    if inactive_IR > 0 :
-        if frame_count % frame_interval == 0:
-            results = model(img, stream=True)
-    
-            # Create an image from OpenCV frame
-            img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-            draw = ImageDraw.Draw(img_pil)
-    
-            # Create a list to store detected objects
-            detected_objects = []
-    
-            # Coordinates
-            for r in results:
-                boxes = r.boxes
-    
-                for box in boxes:
-                    # Bounding box
-                    x1, y1, x2, y2 = box.xyxy[0]
-                    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-    
-                    # Confidence
-                    confidence = math.ceil((box.conf[0] * 100)) / 100
-    
-                    # Class name
-                    cls = int(box.cls[0])
-                    class_name = classNames[cls]
-    
-                    # Store detected object information
-                    detected_objects.append((x1, class_name))
-    
-            # Sort detected objects by x1 (from left to right)
-            detected_objects.sort(key=lambda x: x[0])
-    
-            # Build a string of class names from left to right
-            detected_classes_string = "".join([obj[1] for obj in detected_objects])
-    
-            # Draw rectangles and text with custom font
-            for x1, class_name in detected_objects:
-                cv2.rectangle(img, (x1, y1), (x1 + 60, y1 + 30), (255, 0, 255), 3)  # draw rectangle in OpenCV
-                draw.text((x1, y1), f"{class_name}", font=font, fill=(255, 0, 0))
-    
-            # Convert back to OpenCV format
-            img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
-            # Show the image
-            cv2.imshow('Webcam', img)
-            
-            dist = distance()
-            print(dist)
-            if 1 <= dist < 15:
-                set_angle2(90)
-            else:
-                set_angle2(0)
-            
-                if len(detected_classes_string) > 0:
-                    data = {"license": detected_classes_string}
-                    print('data : ', detected_classes_string)
-                    result = whitelist_collection.find_one(data)
-                    check_old_value = detected_classes_string
-                    print(check_old_value)
-                    if result is not None:
-                        print(detected_classes_string, "Is Whitelisted!!!")
-                        global_check = True
-                        set_angle(90)
-                        time.sleep(5)
+
+    if frame_count % frame_interval == 0:
+        results = model(img, stream=True)
+
+        # Create an image from OpenCV frame
+        img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        draw = ImageDraw.Draw(img_pil)
+
+        # Create a list to store detected objects
+        detected_objects = []
+
+        # Coordinates
+        for r in results:
+            boxes = r.boxes
+
+            for box in boxes:
+                # Bounding box
+                x1, y1, x2, y2 = box.xyxy[0]
+                x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+
+                # Confidence
+                confidence = math.ceil((box.conf[0] * 100)) / 100
+
+                # Class name
+                cls = int(box.cls[0])
+                class_name = classNames[cls]
+
+                # Store detected object information
+                detected_objects.append((x1, class_name))
+
+        # Sort detected objects by x1 (from left to right)
+        detected_objects.sort(key=lambda x: x[0])
+
+        # Build a string of class names from left to right
+        detected_classes_string = "".join([obj[1] for obj in detected_objects])
+
+        # Draw rectangles and text with custom font
+        for x1, class_name in detected_objects:
+            cv2.rectangle(img, (x1, y1), (x1 + 60, y1 + 30), (255, 0, 255), 3)  # draw rectangle in OpenCV
+            draw.text((x1, y1), f"{class_name}", font=font, fill=(255, 0, 0))
+
+        # Convert back to OpenCV format
+        img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
+        # Show the image
+        cv2.imshow('Webcam', img)
         
-                    else:
-                        print(detected_classes_string, "Not Whitelisted!!!")
-                        global_check = True
-                        set_angle(0)
+        dist = distance()
+        print(dist)
+        if 1 <= dist < 15:
+            set_angle2(90)
+        else:
+            set_angle2(0)
+        IR_active = checkIR()
+        inactive_IR = 4 - IR_active
+        
+        if inactive_IR > 0 :
+            if len(detected_classes_string) > 0:
+                data = {"license": detected_classes_string}
+                print('data : ', detected_classes_string)
+                result = whitelist_collection.find_one(data)
+                check_old_value = detected_classes_string
+                print(check_old_value)
+                if result is not None:
+                    print(detected_classes_string, "Is Whitelisted!!!")
+                    global_check = True
+                    set_angle(90)
+                    time.sleep(5)
+    
                 else:
-                    print("Not Found Anything!!!")
+                    print(detected_classes_string, "Not Whitelisted!!!")
+                    global_check = True
                     set_angle(0)
-            
-                
-        if cv2.waitKey(1) == ord('q'):
-            break
-    else:
+            else:
+                print("Not Found Anything!!!")
+                set_angle(0)
+        else:
             beep()
             print("Full slot!!!")
             
             set_angle(0)
-
+            
+    if cv2.waitKey(1) == ord('q'):
+        break
+    
 cap.release()
 cv2.destroyAllWindows()
