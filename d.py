@@ -205,11 +205,11 @@ while True:
             GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
             time.sleep(0.5)  # Beep for 0.5 seconds
             GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
-            time.sleep(0.5))  # Wait for 0.5 seconds between beeps
+            time.sleep(0.5)  # Wait for 0.5 seconds between beeps
             GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
             time.sleep(0.5)  # Beep for 0.5 seconds
             GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
-            time.sleep(0.5))  # Wait for 0.5 seconds between beeps
+            time.sleep(0.5)  # Wait for 0.5 seconds between beeps
             
             
     if cv2.waitKey(1) == ord('q'):
