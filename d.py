@@ -51,7 +51,7 @@ def set_angle(angle):
     
 def set_angle2(angle):
     duty_cycle = angle_to_duty_cycle(angle)
-    pwm.start(duty_cycle)
+    pwm2.start(duty_cycle)
     time.sleep(1) # Wait for the servo to reach the position
 TRIG = 6
 ECHO = 5
@@ -148,8 +148,8 @@ while True:
         img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
         dist = distance()
         print(dist)
-        if(dist < 5):
-            set_angle(90)
+        if 1 <= dist < 5:
+            set_angle2(90)
             time.sleep(5)
         else:
             set_angle(90)
