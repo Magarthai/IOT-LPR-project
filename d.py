@@ -30,19 +30,36 @@ GPIO.setmode(GPIO.BCM)
 # Set the GPIO pin for the servo
 servo_pin = 27
 servo2_pin = 25
-ir_sensor_pin = 17
+ir_sensor_pin1 = 26
+ir_sensor_pin2 = 19
+ir_sensor_pin3 = 20
+ir_sensor_pin4 = 16
 
 # Set PWM parameters
 GPIO.setup(servo_pin, GPIO.OUT)
 GPIO.setup(servo2_pin, GPIO.OUT)
-GPIO.setup(ir_sensor_pin, GPIO.IN)
+GPIO.setup(ir_sensor_pin1, GPIO.IN)
+GPIO.setup(ir_sensor_pin2, GPIO.IN)
+GPIO.setup(ir_sensor_pin3, GPIO.IN)
+GPIO.setup(ir_sensor_pin4, GPIO.IN)
 pwm = GPIO.PWM(servo_pin, 50) # 50 Hz (20 ms PWM period)
 pwm2 = GPIO.PWM(servo2_pin, 50) # 50 Hz (20 ms PWM period)
 # Function to convert angle to duty cycle
 def angle_to_duty_cycle(angle):
     duty_cycle = (angle / 18) + 2
     return duty_cycle
-
+def checkIR():
+    full = 4
+    if GPIO.input(ir_sensor_pin1) == GPIO.HIGH:
+        full -= 1
+    elif GPIO.input(ir_sensor_pin2) == GPIO.HIGH:
+        full -= 1
+    elif GPIO.input(ir_sensor_pin3) == GPIO.HIGH:
+        full -= 1
+    elif GPIO.input(ir_sensor_pin4) == GPIO.HIGH:
+        full -= 1
+    return full
+        
 # Function to move the servo to a specific angle
 def set_angle(angle):
     duty_cycle = angle_to_duty_cycle(angle)
@@ -154,32 +171,41 @@ while True:
         else:
             print("Slot 1 parking")
 
+        IR_active = checkIR()
+        inactive_IR = 4 - IR_active
+
         dist = distance()
         print(dist)
         if 1 <= dist < 15:
             set_angle2(90)
         else:
             set_angle2(0)
-        if len(detected_classes_string) > 0:
-            data = {"license": detected_classes_string}
-            print('data : ', detected_classes_string)
-            result = whitelist_collection.find_one(data)
-            check_old_value = detected_classes_string
-            print(check_old_value)
-            if result is not None:
-                print(detected_classes_string, "Is Whitelisted!!!")
-                global_check = True
-                set_angle(90)
-                time.sleep(5)
-
+        IR_active = checkIR()
+        
+        if inactive_IR > 0 :
+            if len(detected_classes_string) > 0:
+                data = {"license": detected_classes_string}
+                print('data : ', detected_classes_string)
+                result = whitelist_collection.find_one(data)
+                check_old_value = detected_classes_string
+                print(check_old_value)
+                if result is not None:
+                    print(detected_classes_string, "Is Whitelisted!!!")
+                    global_check = True
+                    set_angle(90)
+                    time.sleep(5)
+    
+                else:
+                    print(detected_classes_string, "Not Whitelisted!!!")
+                    global_check = True
+                    set_angle(0)
             else:
-                print(detected_classes_string, "Not Whitelisted!!!")
-                global_check = True
+                print("Not Found Anything!!!")
                 set_angle(0)
         else:
-            print("Not Found Anything!!!")
+            print("Full slot!!!")
             set_angle(0)
-    
+            
     if cv2.waitKey(1) == ord('q'):
         break
 
