@@ -22,10 +22,10 @@ try:
     while True:
         # Read the values of each sensor and update counts
         for sensor, pin in sensor_pins.items():
-            if GPIO.input(pin) == GPIO.HIGH:
+            if GPIO.input(pin) != GPIO.HIGH:
                 sensor_counts[sensor] += 1
                 print(f"{sensor} IR code is high. Count: {sensor_counts[sensor]}")
-                time.sleep(5)
+                time.sleep(1)
 
 finally:
     # Clean up GPIO
