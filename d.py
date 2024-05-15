@@ -152,7 +152,7 @@ while True:
             set_angle2(90)
             time.sleep(5)
         else:
-            set_angle(90)
+            set_angle(0)
         # Show the image
         cv2.imshow('Webcam', img)
         if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
