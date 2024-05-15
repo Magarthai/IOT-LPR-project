@@ -166,10 +166,6 @@ while True:
         # Show the image
         cv2.imshow('Webcam', img)
         
-        if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
-            print("Slot 1 clear")
-        else:
-            print("Slot 1 parking")
 
         IR_active = checkIR()
         inactive_IR = 4 - IR_active
