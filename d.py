@@ -199,6 +199,7 @@ while True:
         # else:
         #     print("Not Found Anything!!!")
         #     set_angle(0)
+        GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
     else:
         print("Full slot!!!")
         GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
