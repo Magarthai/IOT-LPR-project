@@ -123,6 +123,12 @@ while True:
     frame_count += 1
 
     if frame_count % frame_interval == 0:
+        dist = distance()
+        print(dist)
+        if 1 <= dist < 15:
+            set_angle2(90)
+        else:
+            set_angle2(0)
         results = model(img, stream=True)
 
         # Create an image from OpenCV frame
@@ -171,12 +177,7 @@ while True:
         IR_active = checkIR()
         inactive_IR = 4 - IR_active
 
-        dist = distance()
-        print(dist)
-        if 1 <= dist < 15:
-            set_angle2(90)
-        else:
-            set_angle2(0)
+        
         IR_active = checkIR()
         
         if inactive_IR > 0 :
