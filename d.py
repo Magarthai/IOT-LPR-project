@@ -101,13 +101,6 @@ check_old_value = ""
 global_check = False
 setup()
 while True:
-    dist = distance()
-    print(dist)
-    if 1 <= dist < 5:
-        set_angle2(90)
-        time.sleep(5)
-    else:
-        set_angle2(0)
     success, img = cap.read()
     frame_count += 1
 
@@ -155,10 +148,18 @@ while True:
         img = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
         # Show the image
         cv2.imshow('Webcam', img)
+        
         if GPIO.input(ir_sensor_pin) == GPIO.HIGH:
             print("Slot 1 clear")
         else:
             print("Slot 1 parking")
+
+        dist = distance()
+        print(dist)
+        if 1 <= dist < 5:
+            set_angle2(90)
+        else:
+        set_angle2(0)
         if len(detected_classes_string) > 0:
             data = {"license": detected_classes_string}
             print('data : ', detected_classes_string)
