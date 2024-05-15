@@ -201,11 +201,16 @@ while True:
                 set_angle(0)
         else:
             print("Full slot!!!")
-            GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
-            time.sleep(1)  # Beep for 0.5 seconds
-            GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
-            time.sleep(1)  # Wait for 0.5 seconds between beeps
             set_angle(0)
+            GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
+            time.sleep(0.5)  # Beep for 0.5 seconds
+            GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
+            time.sleep(0.5))  # Wait for 0.5 seconds between beeps
+            GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
+            time.sleep(0.5)  # Beep for 0.5 seconds
+            GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
+            time.sleep(0.5))  # Wait for 0.5 seconds between beeps
+            
             
     if cv2.waitKey(1) == ord('q'):
         break
