@@ -6,6 +6,7 @@ from pymongo import MongoClient
 import time
 import RPi.GPIO as GPIO
 from ultralytics import YOLO
+from bson import ObjectId
 from datetime import datetime
 # Start webcam
 cap = cv2.VideoCapture(0)
