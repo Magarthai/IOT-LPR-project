@@ -20,7 +20,7 @@ MONGODB_URI = "mongodb+srv://magargame:Magarthai1@cluster0.msxpgo0.mongodb.net/?
 client = MongoClient(MONGODB_URI)
 db = client.whitelist
 whitelist_collection = db.list_whitelists
-
+dashboard_collection = db.dashboards
 import RPi.GPIO as GPIO
 import time
 
@@ -139,7 +139,7 @@ while True:
         print(dist)
         if 1 <= dist < 15:
             set_angle2(90)
-            result = whitelist_collection.insert_one(exit_data)
+            result = dashboard_collection.insert_one(exit_data)
         else:
             set_angle2(0)
         results = model(img, stream=True)
@@ -203,7 +203,7 @@ while True:
                     print(check_old_value)
                     if result is not None:
                         print(detected_classes_string, "Is Whitelisted!!!")
-                        result = whitelist_collection.insert_one(entry_data)
+                        result = dashboard_collection.insert_one(entry_data)
                         global_check = True
                         set_angle(90)
                         time.sleep(2)
