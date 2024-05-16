@@ -142,6 +142,7 @@ while True:
         print(dist)
         if 1 <= dist < 15:
             set_angle2(90)
+            dashboard_collection = db.dashboards
             result = dashboard_collection.insert_one(exit_data)
         else:
             set_angle2(0)
@@ -206,6 +207,7 @@ while True:
                     print(check_old_value)
                     if result is not None:
                         print(detected_classes_string, "Is Whitelisted!!!")
+                        dashboard_collection = db.dashboards
                         result = dashboard_collection.insert_one(entry_data)
                         global_check = True
                         set_angle(90)
