@@ -84,7 +84,7 @@ const AdminNavbar = ({ userData,clicked }) => {
               <img src={require('../img/3.png')} alt="dashboard" />
               <p>Dashboard</p>
             </a>
-            <a href='/ticketHistory' className="light navbar-dashboard" id="nav-3" onMouseEnter={() => hoverHandle("nav-2")} onMouseLeave={() => hoverHandle("nav-22")}>
+            <a href='/Whitelist' className="light navbar-dashboard" id="nav-3" onMouseEnter={() => hoverHandle("nav-2")} onMouseLeave={() => hoverHandle("nav-22")}>
               <img src={require('../img/4.png')} alt="admin manager" />
               <p>Whitelist</p>
             </a>

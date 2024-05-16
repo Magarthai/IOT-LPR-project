@@ -14,6 +14,6 @@ router.post("/register", createUser);
 router.post("/login", loginUserCtrl);
 router.get("/refresh", handleRefreshToken);
 router.get("/logout", logoutUserCtrl);
-router.get("/all-users",authMiddleware, isAdmin, getAllUser);
+router.get("/all-users",getAllUser);
 
 module.exports = router;

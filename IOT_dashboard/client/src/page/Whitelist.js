@@ -8,51 +8,53 @@ import '../css/page_css/ticketpage.css';
 import Swal from 'sweetalert2';
 import CountSkeleton from '../utils/CountSkeleton.js';
 import HambergerBar from '../utils/HambergerBar.js';
+import DataTable from 'react-data-table-component';
+
 import axios from 'axios'
 function AdminPage() {
   const { userData } = useUserAuth();
   const navigate = useNavigate();
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
+  const [usersData, setUsersData] = useState([]);
   const [loader, setLoader] = useState(false);
   const API = process.env.REACT_APP_API
   const [statusInfo, setStatusInfo] = useState({});
   const [clicked, setClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [whitelist, setWhitelist] = useState("");
+  const [name, setName] = useState("")
   const fetchData = async () => {
     try {
       console.log('xd')
       console.log(userData._id, "userData")
-      const info = {
-        id: userData._id
-      };
-      const respone = await axios.post(`${API}/ticket/getTicketByAdmin`, info,
-        {
-          headers: {
-            Authorization: `Bearer ${userData.refreshToken}`,
-            role: userData.role
-
-          },
-        });
-      if (respone.data) {
-        console.log(respone.data, "XD")
-        if (respone.data.message == "Ticket fetch successfully") {
-          setData(respone.data.ticket)
-        }
+      const respone = await axios.get(`${API}/whitelist/getWhitelist`)
+        
+      if (respone.data != undefined) {
+        setData(respone.data)
 
       }
 
-      const respone2 = await axios.post(`${API}/dashboard/getStatusAdminCount`, info,
-        {
-          headers: {
-            Authorization: `Bearer ${userData.refreshToken}`,
-            role: userData.role
 
-          },
-        });
-      if (respone2.data) {
-        console.log(respone2.data, "XD2")
-        setStatusInfo(respone2.data);
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchUserData = async () => {
+    try {
+      console.log('xd')
+      console.log(userData._id, "userData")
+      const respone = await axios.get(`${API}/user/all-users`)
+      console.log("adminlist",respone.data)
+      if (respone.data != undefined) {
+        setUsersData(respone.data)
+
       }
+
+
       setTimeout(() => {
         setIsLoading(false)
       }, 1000);
@@ -65,116 +67,72 @@ function AdminPage() {
     console.log(data.lenght, "data")
   }, [data])
 
-  const barColors = ["#1f77b4", "#ff7f0e"]
-  const img_status = (e) => {
-    console.log(e);
-    if (e === "pending") {
-      return "https://cdn.discordapp.com/attachments/445928139021877259/1226597902596571216/Group.png?ex=66255951&is=6612e451&hm=c9350934360d3a5cb03d5bab5826e5697b132f68d69b682d7b28b1154b18082d&";
-    }
-    else if (e === "accepted") {
-      return "https://cdn.discordapp.com/attachments/445928139021877259/1226597902856749106/Meeting_Time.png?ex=66255951&is=6612e451&hm=0a5b210c2b113d9c2e614aa32283892babf8fc730ffc3be764725f05460410a0&"
-    } else if (e === "success") {
-      return "https://cdn.discordapp.com/attachments/445928139021877259/1226597903087308842/Ok.png?ex=66255951&is=6612e451&hm=577726e0f2a2f13cee08eb34845a52b1f62bafa7a42e10ff0a4c44f6fa310c73&"
-    } else {
-      return "https://cdn.discordapp.com/attachments/445928139021877259/1226597902349111336/Cancel.png?ex=66255951&is=6612e451&hm=68b3f78ea5d25528c45496163533d5a1e38537531fc5852fe41ad5cf8af9f178&"
-    }
-  };
-
-  const handleSubmit = async (ticket) => {
+  const handleSubmit = async () => {
     try {
       const info = {
-        name: ticket.name,
-        email: ticket.email,
-        topic: ticket.selectTopic,
-        time: new Date(ticket.createdAt).toLocaleString(),
-        recipient: userData.fname + " " + userData.lname,
-        status: "รับเรื่องแล้ว",
-        recipientId: userData._id,
-        updateStatus: "accepted"
+        name: name,
+        license: whitelist,
       }
-
-      const updateStatus = await axios.put(`${API}/ticket/updateStatusTicket/:${ticket._id}`, {
-        headers: {
-          Authorization: `Bearer ${userData.refreshToken}`,
-          role: userData.role
-
-        },
-        info
-      });
-      if (updateStatus.data) {
-        console.log(updateStatus.data.message)
-        if (updateStatus.data.message == "Already accepted") {
-          Swal.fire({
-            icon: "error",
-            title: "รับเรื่องไม่สําเร็จ",
-            text: "มีคนรับเรื่องนี้แล้ว!",
-            confirmButtonText: "ตกลง",
-            confirmButtonColor: '#263A50',
-          })
-          return;
-        } else {
-          console.log(updateStatus.data.message)
-          setLoader(true);
-          const respone = await axios.post(`${API}/ticket/sendemail`, info,
-            {
-              headers: {
-                Authorization: `Bearer ${userData.refreshToken}`,
-                role: userData.role
-
-              },
-            });
-
-          if (respone.data) {
-            if (respone.data.RespCode == 200) {
-              setLoader(false);
-              navigate("/ticketinfo", { state: { data: ticket } });
-            }
-          }
-        }
+      const respone = await axios.post(`${API}/whitelist/createWhitelist`,info);
+      console.log(respone.data)
+      if(respone.data = "success") {
+        Swal.fire({
+          icon: "success",
+          title: "สําเร็จ!",
+          text: "สร้าง White ลงในระบบแล้ว!",
+          confirmButtonText: "ตกลง",
+          confirmButtonColor: '#263A50',
+        })
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "ไม่สําเร็จ!",
+          text: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง!",
+          confirmButtonText: "ตกลง",
+          confirmButtonColor: '#263A50',
+        })
       }
     } catch (err) {
       console.error(err);
     }
   }
 
-
-  const fetchDataQuery = async (e) => {
-    try {
-      setIsLoading(true);
-      console.log('xd')
-      const info = {
-        status: e,
-      }
-      const respone = await axios.post(`${API}/ticket/getTicketQuery`, info,
-        {
-          headers: {
-            Authorization: `Bearer ${userData.refreshToken}`,
-            role: userData.role
-
-          },
-        });
-      if (respone.data) {
-        if (respone.data.message == "Ticket fetch successfully") {
-          setData(respone.data.ticket)
-          setTimeout(() => {
-            setIsLoading(false)
-          }, 1000);
-        }
-
-      }
-    } catch (err) {
-      console.error(err)
-    }
-  };
   useEffect(() => {
     if (userData) {
       fetchData();
+      fetchUserData();
     }
 
   }, [userData]);
   const toggleClicked = () => {
     setClicked(!clicked);
   };
+
+  const columns = [
+    {
+      name: "Name",
+      selector: row => row.name
+    },
+    {
+      name: "License",
+      selector: row => row.license
+    },
+  ];
+
+  const column2 = [
+    {
+      name: "Firstname",
+      selector: row => row.fname
+    },
+    {
+      name: "Lastname",
+      selector: row => row.lname
+    },
+    {
+      name: "Email",
+      selector: row => row.email
+    },
+  ];
   return (
     <div className="admin-container" >
       {loader ? <BarLoaders></BarLoaders> : <div></div>}
@@ -182,7 +140,7 @@ function AdminPage() {
       <AdminNavbar clicked={clicked} userData={userData} />
       <div className='adminpage-header button-color'></div>
       <div className="leftside">
-        <div className="summary-status-container">
+        <div className="whitelist-container">
           <div className="whitelist-container">
             <div className="add-whitelist">
               <div className="car-icon">
@@ -190,13 +148,33 @@ function AdminPage() {
               </div>
               <div className="add-whitelist-zone">
                 <span>ADD WHITELIST!</span>
-                <input type="text" name="license" placeholder='Type whitelist here!'/>
-                <button>Add whitelist!</button>
+                < input style={{marginBottom:10}} type="text" name="license" placeholder='Username!' onChange={(event)=> setName(event.target.value)}/>
+                <input type="text" name="license" placeholder='Type whitelist here!' onChange={(event)=> setWhitelist(event.target.value)}/>
+                <button onClick={() => handleSubmit()}>Add whitelist!</button>
               </div>
             </div>
           </div>
+          <div className="bottom-side">
+          <div className="whitelist-list">
+            <span>WHITELIST</span>
+            <DataTable
+            style={{overflowY:'scroll'}}
+              columns={columns}
+              data={data}>
+            </DataTable>
+          </div>
+          <div className="admin-list">
+            <span>Admin</span>
+            <DataTable
+            style={{overflowY:'scroll'}}
+              columns={column2}
+              data={usersData}>
+            </DataTable>
+          </div>
+          </div>
+          
+          
         </div>
-
       </div>
 
 

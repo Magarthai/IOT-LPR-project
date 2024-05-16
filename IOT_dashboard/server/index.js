@@ -6,6 +6,7 @@ const dotenv = require('dotenv').config();
 const authRouter = require('./routes/authRoute');
 const ticketRouter = require('./routes/ticketRoute');
 const DashboardRoute = require('./routes/DashboardRoute');
+const WhitelistRoute = require('./routes/whitelistRoute');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
@@ -35,6 +36,7 @@ app.use(cookieParser());
 app.use('/api/user', authRouter);
 app.use('/api/ticket', ticketRouter);
 app.use('/api/dashboard', DashboardRoute);
+app.use('/api/whitelist', WhitelistRoute);
 app.use(notFound);
 app.use(errorHandler);
 
