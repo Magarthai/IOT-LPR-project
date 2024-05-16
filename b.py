@@ -75,12 +75,14 @@ TRIG = 6
 ECHO = 5
 
 entry_data  = {
+    "_id": ObjectId(),
     "type": "entry",
     "createdAt": datetime.utcnow(), 
     "updatedAt": datetime.utcnow() 
 }
 
 exit_data  = {
+    "_id": ObjectId(),
     "type": "exit",
     "createdAt": datetime.utcnow(), 
     "updatedAt": datetime.utcnow() 
