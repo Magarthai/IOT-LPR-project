@@ -75,20 +75,6 @@ def set_angle2(angle):
 TRIG = 6
 ECHO = 5
 
-entry_data  = {
-    "_id": ObjectId(),
-    "type": "entry",
-    "createdAt": datetime.utcnow(), 
-    "updatedAt": datetime.utcnow() 
-}
-
-exit_data  = {
-    "_id": ObjectId(),
-    "type": "exit",
-    "createdAt": datetime.utcnow(), 
-    "updatedAt": datetime.utcnow() 
-}
-
 def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(TRIG, GPIO.OUT)
@@ -235,7 +221,6 @@ while True:
                     print(check_old_value)
                     if result is not None:
                         print(detected_classes_string, "Is Whitelisted!!!")
-                        result = whitelist_collection.insert_one(entry_data)
                         global_check = True
                         set_angle(90)
                         time.sleep(2)
