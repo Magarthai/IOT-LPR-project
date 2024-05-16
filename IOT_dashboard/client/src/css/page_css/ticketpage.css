@@ -1,0 +1,261 @@
+ .ticket-card{
+    height: 340px;
+    background-color: white;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.096);
+    z-index: 2;
+    padding: 20px;
+    margin: 20px;
+    width: 90%;
+    max-width: 700px;
+    border-radius: 20px;
+ }
+ .filter-container{
+    width: 50px;
+    height: 100%;
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index:  3;
+    margin-left: 40px;
+}
+
+.filter-box{
+    display: inline;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    background-color: #133D94;
+    border-radius: 10px;
+}
+
+.box-circle-status-img{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    clip-path: circle(40%);
+}
+
+.box-status-img{
+    cursor: pointer;
+    margin: 7px;
+    width: 50px;
+    border-radius: 5px;
+    height: 50px ;
+    background-color: white;
+}
+
+.box-circle-status-img img{
+    width: 30px;
+    height: 30px;
+
+}
+ .test{
+    display: flex;
+    justify-content: center;
+    max-width: 700px;
+    width: 80%;
+ }
+
+ .ticket-container{
+    position: relative;
+    width: 100%;
+    margin: 20px;
+    margin-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+ }
+ 
+ 
+ #pending{
+   
+    background-color: #646464;
+    background-image: linear-gradient(62deg, #646464 0%, #867b7b 100%);    
+}
+
+.ticket-header{
+    display: flex;
+    margin-bottom: -20px;
+    justify-content: space-between;
+}
+
+.ticket-detial-container{
+    width: 100%;
+    height: 135px;
+    border-radius: 10px;
+    border: 0.5px solid rgba(0, 0, 0, 0.096);
+}
+
+.button-ticket-accept{
+    width: 100%;
+    padding: 6px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 12px;
+    border: none;
+    background-color: #FBAB7E;
+    background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);    
+}
+
+.ticket-detial-container-pending{
+    width: 100%;
+    height: 110px;
+    border-radius: 10px;
+    border: 0.5px solid rgba(0, 0, 0, 0.096);
+}
+
+.ticket-detial {
+    height: 100%;
+    padding: 10px;
+    overflow-y: scroll;
+    word-wrap: break-word; /* หรือ overflow-wrap: break-word; */
+
+}
+
+.ticket-detial::-webkit-scrollbar {
+    width: 5px; 
+}
+
+.ticket-detial::-webkit-scrollbar-thumb {
+    background-color: #67748e;    /* color of the scroll thumb */
+    border-radius: 20px; 
+}
+
+body::-webkit-scrollbar-track {
+    background: none;        /* color of the tracking area */
+  }
+  
+
+#accepted{
+   
+    background-color: #FBAB7E;
+    background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);    
+}
+
+#success {
+    background-color: #27af33;
+background-image: linear-gradient(45deg, #27af33 0%, #adff7d 100%);
+
+}
+
+
+
+#reject{
+    background-color: rgba(226,24,24,1);
+    background-image: linear-gradient(45deg, rgba(226, 24, 24, 0.76) 0%, rgba(160, 6, 6, 0.644) 100%);
+}
+
+
+.card-container{
+    display: flex;
+    justify-content: center;
+}
+
+.ticket-status-text{
+    display: none;
+    margin-top: 0
+}
+
+@media (max-width: 860px) {
+    .leftside{
+        margin: 0;
+    }
+    .filter-container{
+        margin-left: 10px;
+        scale: 0.8;
+    }
+    .summary-status-card{
+        min-width: 88%;
+        width: 25%;
+        margin: 20px;
+        margin-left:  10px;
+        margin-right: 10px;
+    }
+    .test{
+        width: 90%;
+
+        height: auto;
+    }
+
+
+    .ticket-header h1{
+        font-size: 25px;
+    }
+
+
+}
+
+@media (max-width: 450px) {
+    .ticket-status-text{
+        display: flex;
+        margin-top: 20px;
+    }
+    .status-img{
+        display: none;
+       
+    }
+    
+    .test{
+        height: auto;
+    }
+    .ticket-card{
+        height: auto;
+    }
+
+}
+
+.whitelist-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.add-whitelist{
+    background-color: white;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.096);
+    width: 80%;
+    height: 300px;
+    display: flex;
+    border-radius: 20px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.add-whitelist-zone{
+    display: flex;
+    flex-direction: column;
+    padding-right: 30%;
+}
+
+.add-whitelist-zone span{
+    font-weight: 600;
+    font-size: 40px;
+}
+
+.car-icon{
+    margin-left: 10%;
+}
+
+.car-icon img{
+    width: 350px;
+    height: auto;
+}
+
+.add-whitelist-zone input[type=text] {
+    height: 50px;
+    font-size: 30px;
+    padding: 10px;
+    font-weight: 500;
+    border-radius: 10px;
+}
