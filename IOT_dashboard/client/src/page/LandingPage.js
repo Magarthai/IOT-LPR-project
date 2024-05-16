@@ -54,7 +54,7 @@ function LandingPage() {
           <div className='landing-text'>
             <h1>LPR MANAGER</h1>
             <p>ระบบการตรวจจับป้ายทะเบียนเพื่อเปิดไม้กั้นรถ คุณสามารถตั้งค่า หรือดูรายละเอียดต่างๆได้ผ่านปุ่มนี้</p>
-            <a className='pick-button medium button-color' onClick={() => slide()}>คลิกปุ่มนี้</a>
+            <a className='pick-button medium button-color' onClick={() => login()}>คลิกปุ่มนี้</a>
 
           </div>
           <img className='extralight landing-img' src='https://i.imgur.com/TqMUiiB.png' alt='cloud server'></img>

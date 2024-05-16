@@ -1,4 +1,4 @@
-const Ticket = require("../models/Ticket.model");
+const Dashboard = require("../models/Dashboard.model");
 const { Error } = require("mongoose");
 const moment = require('moment-timezone');
 function formatDate(date) {
@@ -20,15 +20,16 @@ function groupBy(arr, key) {
 const getSuccessErrorCount = async (req, res) => {
   try {
     let data = [
-      { name: 'Success', value: 0, fill: '#1f77b4' },
-      { name: 'Reject', value: 0, fill: '#ff7f0e' },
+      { name: 'entry', value: 0, fill: '#1f77b4' },
+      { name: 'exit', value: 0, fill: '#ff7f0e' },
     ];
-    const Tickets = await Ticket.find();
-    if(Tickets) {
-      Tickets.forEach((Ticket) => {
-        if(Ticket.status == "success") {
+    const whitelist = await Dashboard.find();
+    console.log(whitelist);
+    if(whitelist) {
+      whitelist.forEach((Ticket) => {
+        if(Ticket.type == "entry") {
           data[0].value++;
-        } else if (Ticket.status == "reject") {
+        } else if (Ticket.type == "exit") {
           data[1].value++;
         }
       })
@@ -43,23 +44,17 @@ const getSuccessErrorCount = async (req, res) => {
 const  getStatusCount = async (req, res) => {
   try {
   let data = {
-    pending:  0,
-    accepted: 0,
-    success: 0,
-    reject: 0
+    entry:  0,
+    exit: 0,
   }
-  const fetchTicket = await Ticket.find();
+  const Whitelists = await Dashboard.find();
 
-  if(fetchTicket) {
-    fetchTicket.forEach((ticket) => {
-      if(ticket.status == "pending") {
-        data.pending++;
-      } else if(ticket.status == "accepted") {
-        data.accepted++;
-      } else if(ticket.status == "reject") {
-        data.reject++;
-      } else if(ticket.status == "success") {
-        data.success++;
+  if(Whitelists) {
+    Whitelists.forEach((ticket) => {
+      if(ticket.type == "entry") {
+        data.entry++;
+      } else  {
+        data.exit++;
       }
     });
 
@@ -78,14 +73,14 @@ const getMonthTicket = async (req, res) => {
     let startOfMonth = moment().startOf('month').tz('Asia/Bangkok');
     let endOfMonth = moment().endOf('month').tz('Asia/Bangkok');
 
-    const Tickets = await Ticket.find({
+    const Whitelists = await Dashboard.find({
       createdAt: {
           $gte: startOfMonth,
           $lt: endOfMonth
       },
   });
 
-  const groupedData = groupBy(Tickets, 'createdAt');
+  const groupedData = groupBy(Whitelists, 'createdAt');
   const data = [];
 
   for (let date = startOfMonth.clone(); date.isBefore(endOfMonth); date.add(1, 'day')) {
@@ -128,7 +123,7 @@ const getStatusAdminCount = async (req, res) => {
     success: 0,
     reject: 0
   }
-  const fetchTicket = await Ticket.find({recipient: req.body.id});
+  const fetchTicket = await Dashboard.find({recipient: req.body.id});
   console.log()
   if(fetchTicket) {
     fetchTicket.forEach((ticket) => {

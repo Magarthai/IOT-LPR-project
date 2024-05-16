@@ -82,7 +82,9 @@ function AdminPage() {
           text: "สร้าง White ลงในระบบแล้ว!",
           confirmButtonText: "ตกลง",
           confirmButtonColor: '#263A50',
-        })
+        }).then(() => {
+          window.location.reload();
+        });
       } else {
         Swal.fire({
           icon: "error",

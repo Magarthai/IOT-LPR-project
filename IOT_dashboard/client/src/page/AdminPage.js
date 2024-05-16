@@ -12,6 +12,7 @@ function AdminPage() {
   const [isLoading, setIsLoading] = useState(true);
   const { userData,logout_global } = useUserAuth();
   const [data, setData] = useState([]);
+  const [dataa, setDataa] = useState([]);
   const [data2, setData2] = useState([]);
   const [statusInfo, setStatusInfo] = useState({});
   const [clicked, setClicked] = useState(false); 
@@ -45,6 +46,7 @@ function AdminPage() {
       if (response2.data) {
         setData(response2.data);
       }
+      
       const response3 = await axios.get(`${API}/dashboard/getSuccessErrorCount`, {
         headers: {
             Authorization: `Bearer ${userData.refreshToken}`,
@@ -54,6 +56,7 @@ function AdminPage() {
         });
         
       if (response3.data) {
+        console.log("data2",response3.data)
         setData2(response3.data);
       }
       setTimeout(() => {
@@ -88,7 +91,7 @@ function AdminPage() {
             <div className="summary-status-card">
               <div className="info">
                 <h1 className='light'>Entry</h1>
-                {statusInfo && <span className='extralight'>{statusInfo.success}&nbsp;รายการ</span>}
+                {statusInfo && <span className='extralight'>{statusInfo.entry}&nbsp;รายการ</span>}
               </div>
               <div className="status-img success">
                 <img src={require('../img/Ok.png')} alt="success" />
@@ -97,7 +100,7 @@ function AdminPage() {
             <div className="summary-status-card">
               <div className="info">
                 <h1 className='light'>Out</h1>
-                {statusInfo && <span className='extralight'>{statusInfo.reject}&nbsp;รายการ</span>}
+                {statusInfo && <span className='extralight'>{statusInfo.exit}&nbsp;รายการ</span>}
               </div>
               <div className="status-img reject">
                 <img src={require('../img/Cancel.png')} alt="reject" />
@@ -153,7 +156,7 @@ function AdminPage() {
                   <Bar dataKey="value">
                     {
                       data2.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.name === 'Success' ? 'url(#successGradient)' : 'url(#rejectGradient)'} />
+                        <Cell key={`cell-${index}`} fill={entry.name === 'entry' ? 'url(#successGradient)' : 'url(#rejectGradient)'} />
                       ))
                     }
                   </Bar>

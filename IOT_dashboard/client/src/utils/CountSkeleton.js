@@ -23,24 +23,7 @@ const BarLoaders = () => {
             <Skeleton circle width={75} height={75}/>
             </div>
           </div>
-          <div className="summary-status-card">
-          <div className="info">
-          <Skeleton  height={30} width={100}/>
-            <Skeleton  height={20} width="70%"/>
-            </div>
-            <div className="status-img pending">
-            <Skeleton circle width={75} height={75}/>
-            </div>
-          </div>
-          <div className="summary-status-card">
-          <div className="info">
-          <Skeleton  height={30} width={100}/>
-            <Skeleton  height={20} width="70%"/>
-            </div>
-            <div className="status-img pending">
-            <Skeleton circle width={75} height={75}/>
-            </div>
-          </div>
+          
         </div>
     </SkeletonTheme>
   )
