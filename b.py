@@ -190,15 +190,16 @@ while True:
         
         IR_active = checkIR()
         
-        if inactive_IR > 0 :
-            if len(detected_classes_string) > 0:
-                data = {"license": detected_classes_string}
-                print('data : ', detected_classes_string)
-                result = whitelist_collection.find_one(data)
-                if(check_old_value != detected_classes_string):
-                    check_old_value = detected_classes_string
-                    print(check_old_value)
-                    if result is not None:
+        
+        if len(detected_classes_string) > 0:
+            data = {"license": detected_classes_string}
+            print('data : ', detected_classes_string)
+            result = whitelist_collection.find_one(data)
+            if(check_old_value != detected_classes_string):
+                check_old_value = detected_classes_string
+                print(check_old_value)
+                if result is not None:
+                    if inactive_IR > 0 :
                         print(detected_classes_string, "Is Whitelisted!!!")
                         dashboard_collection = db.dashboards
                         entry_data  = {
@@ -211,38 +212,38 @@ while True:
                         global_check = True
                         set_angle(90)
                         time.sleep(2)
-            
                     else:
-                        print(detected_classes_string, "Not Whitelisted!!!")
-                        global_check = True
+                        print("Full slot!!!")
                         set_angle(0)
+                        GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
+                        time.sleep(0.2)  # Beep for 0.5 seconds
+                        GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
+                        time.sleep(0.2)  # Beep for 0.5 seconds
+                        GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
+                        time.sleep(0.2)  # Beep for 0.5 seconds
+                        GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
+                        time.sleep(0.2)  # Wait for 0.5 seconds between beeps
                 else:
-                    check_old_value = detected_classes_string
-                    print(check_old_value)
-                    if result is not None:
-                        print(detected_classes_string, "Is Whitelisted!!!")
-                        global_check = True
-                        set_angle(90)
-                        time.sleep(2)
-            
-                    else:
-                        print(detected_classes_string, "Not Whitelisted!!!")
-                        global_check = True
-                        set_angle(0)
+                    print(detected_classes_string, "Not Whitelisted!!!")
+                    global_check = True
+                    set_angle(0)
             else:
-                print("Not Found Anything!!!")
-                set_angle(0)
+                check_old_value = detected_classes_string
+                print(check_old_value)
+                if result is not None:
+                    print(detected_classes_string, "Is Whitelisted!!!")
+                    global_check = True
+                    set_angle(90)
+                    time.sleep(2)
+        
+                else:
+                    print(detected_classes_string, "Not Whitelisted!!!")
+                    global_check = True
+                    set_angle(0)
         else:
-            print("Full slot!!!")
+            print("Not Found Anything!!!")
             set_angle(0)
-            GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
-            time.sleep(0.2)  # Beep for 0.5 seconds
-            GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
-            time.sleep(0.2)  # Beep for 0.5 seconds
-            GPIO.output(buzzer_pin, GPIO.HIGH)  # Turn buzzer on
-            time.sleep(0.2)  # Beep for 0.5 seconds
-            GPIO.output(buzzer_pin, GPIO.LOW)  # Turn buzzer off
-            time.sleep(0.2)  # Wait for 0.5 seconds between beeps
+        
             
             
     if cv2.waitKey(1) == ord('q'):
