@@ -11,4 +11,4 @@ let list_whitelistSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model('list_whitelist', list_whitelistSchema);
+module.exports = mongoose.model('list_whitelists', list_whitelistSchema);

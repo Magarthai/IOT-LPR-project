@@ -8,6 +8,7 @@ const createWhitelist = async (req, res) => {
     const findWhitelist = await Whitelist.findOne({ license: license });
     if (!findWhitelist) {
       const newWhitelist = await Whitelist.create(req.body);
+      console.log(newWhitelist)
       res.send("success");
     } else {
         res.send("whitelist already exists");

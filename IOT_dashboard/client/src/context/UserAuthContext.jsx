@@ -37,7 +37,7 @@ export function UserAuthContextProvider({ children }) {
 
 
   useEffect(() => {
-    document.title = 'Nipa Cloud';
+    document.title = 'IOT PROJECT';
     if(!userData){
     checkToken();
     }
