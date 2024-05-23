@@ -99,7 +99,7 @@ function AdminPage() {
             </div>
             <div className="summary-status-card">
               <div className="info">
-                <h1 className='light'>Out</h1>
+                <h1 className='light'>Exit</h1>
                 {statusInfo && <span className='extralight'>{statusInfo.exit}&nbsp;รายการ</span>}
               </div>
               <div className="status-img reject">
